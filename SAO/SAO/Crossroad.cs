@@ -26,6 +26,6 @@ namespace SAO
     public enum TrafficLightsState
     {
         NorthSouth,
-        WestEase
+        WestEast
     }
 }
