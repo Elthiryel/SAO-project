@@ -10,6 +10,18 @@ namespace SAO
     {
         static void Main(string[] args)
         {
+			// TESTING PARSER
+			ProblemInstance pi = new ProblemInstance();
+			InputParser.FillRoadsAndCrossroads(pi, "/home/elthiryel/Dokumenty/Mono/SAO-project/SAO/test.txt");
+			foreach (Road r in pi.Roads)
+			{
+				Console.Out.WriteLine("ROAD " + r.Id + ": " + r.Length + "; first: " + r.First.X + ", " + r.First.Y + "; second: " + r.Second.X + ", " + r.Second.Y);
+			}
+			foreach (Crossroad c in pi.Crossroads)
+			{
+				Console.Out.WriteLine("CROSSROAD: " + c.X + ", " + c.Y);
+			}
+
         }
     }
 }

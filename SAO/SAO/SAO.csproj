@@ -51,6 +51,8 @@
     <Compile Include="Road.cs" />
     <Compile Include="TrafficLights.cs" />
     <Compile Include="Route.cs" />
+    <Compile Include="InputParser.cs" />
+    <Compile Include="ProblemInstance.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

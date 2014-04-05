@@ -8,10 +8,26 @@ namespace SAO
 {
     public class Road
     {
+		private static int lastId = -1;
+
+		private static int GetUniqueId()
+		{
+			++lastId;
+			return lastId;
+		}
+
+		public Road(int length, Crossroad firstCrossroad, Crossroad secondCrossroad)
+		{
+			Id = GetUniqueId();
+			Length = length;
+			First = firstCrossroad;
+			Second = secondCrossroad; // TODO what about lanes?
+		}
+
 		public int Id { get; set; }
 
         //get later from Crossroads
-        public int Y { get; set; }
+        public int Y { get; set; } // what is x or y? road is NOT a point :P
         public int X { get; set; }
         public int Length { get; set; }
 

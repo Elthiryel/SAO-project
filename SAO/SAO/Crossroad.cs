@@ -8,6 +8,16 @@ namespace SAO
 {
     public class Crossroad
     {
+		public Crossroad(int y, int x)
+		{
+			X = x;
+			Y = y;
+			North = null;
+			South = null;
+			West = null;
+			East = null;
+		}
+
         public int X { get; set; }
         public int Y { get; set; }
 
