@@ -20,7 +20,9 @@ namespace SAO
         //increase X
         public Road East { get; set; }
 
-        public TrafficLightsState Lights {get; set; }
+		public TrafficLights Lights { get; set; }
+
+        public TrafficLightsState LightsState { get; set; }
     }
 
     public enum TrafficLightsState

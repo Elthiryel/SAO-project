@@ -8,6 +8,8 @@ namespace SAO
 {
     public class Road
     {
+		public int Id { get; set; }
+
         //get later from Crossroads
         public int Y { get; set; }
         public int X { get; set; }
