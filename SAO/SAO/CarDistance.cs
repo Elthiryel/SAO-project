@@ -10,5 +10,7 @@ namespace SAO
     {
         public Car Car { get; set; }
         public int Distance { get; set; }
+        //Delay matters only when Distance = 0 and turn is left/right; Delay differs for left and right
+        public int Delay { get; set; }
     }
 }
