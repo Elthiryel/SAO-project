@@ -1,0 +1,21 @@
+<RoutesList>
+	<Routes>
+		<RouteData>
+			<Crossroads>
+				<CrossroadData>
+					<Direction>North</Direction>
+				</CrossroadData>
+				<CrossroadData>
+					<Crossroad>1</Crossroad>
+				</CrossroadData>
+				<CrossroadData>
+					<Crossroad>2</Crossroad>
+				</CrossroadData>
+				<CrossroadData>
+					<Direction>South</Direction>
+				</CrossroadData>
+			</Crossroads>
+			<Rate>100</Rate>
+		</RouteData>
+	</Routes>
+</RoutesList>

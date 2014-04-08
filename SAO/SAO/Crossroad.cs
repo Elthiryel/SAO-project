@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -44,6 +45,16 @@ namespace SAO
 		public TrafficLights Lights { get; set; }
 
         public TrafficLightsState LightsState { get; set; }
+
+        public List<Road> Roads
+        {
+            get
+            {
+                var list =  new List<Road>(){North,South,West,East};
+                list.RemoveAll(item => item == null);
+                return list;
+            }
+        } 
     }
 
     public enum TrafficLightsState

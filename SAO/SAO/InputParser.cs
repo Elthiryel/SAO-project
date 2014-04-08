@@ -237,12 +237,66 @@ namespace SAO
                 var routesSerialized = (RoutesList)serializer.Deserialize(reader);
                 foreach (var route in routesSerialized.Routes)
                 {
-                    //create routes
+                    List<Road> roads = new List<Road>();
+                    var currentDirection = Direction.NotSet;
+                    Crossroad currentCrossroad = null;
+                    foreach (var crossroads in route.Crossroads)
+                    {
+                        if (crossroads.Direction != Direction.NotSet)
+                        {
+                            currentDirection = crossroads.Direction;
+                        }
+                        else
+                        {
+                            var nextCrossroad = problemInstance.Crossroads[crossroads.Crossroad - 1];
+                            if (currentCrossroad != null)
+                            {    
+                                roads.AddRange(from road in currentCrossroad.Roads
+                                    from _road in nextCrossroad.Roads
+                                    where road.Id == _road.Id
+                                    select road);
+                            }
+                            else
+                            {
+                                AddRoad(roads, currentDirection, nextCrossroad);
+                                currentDirection = Direction.NotSet;
+                            }
+                            currentCrossroad = problemInstance.Crossroads[crossroads.Crossroad-1];
+                        }
+                    }
+                    if (currentDirection != Direction.NotSet)
+                    {
+                        AddRoad(roads, currentDirection, currentCrossroad);
+                    }
+                    problemInstance.Routes.Add(new Route(roads, route.Rate));
                 }
             }
             
 	    }
+
+        public static void AddRoad(List<Road> list, Direction direction, Crossroad nextCrossroad)
+        {
+            switch (direction)
+            {
+                case Direction.North:
+                    list.Add(nextCrossroad.North);
+                    break;
+                case Direction.East:
+                    list.Add(nextCrossroad.East);
+                    break;
+                case Direction.West:
+                    list.Add(nextCrossroad.West);
+                    break;
+                case Direction.South:
+                    list.Add(nextCrossroad.South);
+                    break;
+                default:
+                    Console.WriteLine("Could not determine Direction");
+                    break;
+            }
+        }
 	}
+
 
     [Serializable()]
     [XmlRoot("RoutesList")]
@@ -266,6 +320,16 @@ namespace SAO
     public class CrossroadData
     {
         public int Crossroad { get; set; }
+        public Direction Direction = Direction.NotSet;
+    }
+
+    public enum Direction
+    {
+        South,
+        East,
+        West,
+        North,
+        NotSet
     }
 }
 
