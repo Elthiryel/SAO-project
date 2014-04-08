@@ -72,18 +72,24 @@ namespace SAO
 
 					if (c.Y < ySize - 1)
 					{
+						int lanes = 1;
 						int iterY = c.Y + 1;
 						while (true)
 						{
 							char tile = tiles[iterY, c.X];
-							if (tile == '|')
+							if (tile == '-')
 							{
 								++iterY;
+							}
+							else if (tile == '=')
+							{
+								++iterY;
+								lanes = 2;
 							}
 							else if (tile == 'X')
 							{
 								var endCrossroad = crossroadsDict[new Coordinates(iterY, c.X)];
-								var road = new Road((iterY - c.Y) * tileLength, crossroad, endCrossroad);
+								var road = new Road((iterY - c.Y) * tileLength, crossroad, endCrossroad, lanes);
 								crossroad.South = road;
 								endCrossroad.North = road;
 								roadsList.Add(road);
@@ -98,6 +104,7 @@ namespace SAO
 
 					if (c.X < xSize - 1)
 					{
+						int lanes = 1;
 						int iterX = c.X + 1;
 						while (true)
 						{
@@ -106,10 +113,15 @@ namespace SAO
 							{
 								++iterX;
 							}
+							else if (tile == '=')
+							{
+								++iterX;
+								lanes = 2;
+							}
 							else if (tile == 'X')
 							{
 								var endCrossroad = crossroadsDict[new Coordinates(c.Y, iterX)];
-								var road = new Road((iterX - c.X) * tileLength, crossroad, endCrossroad);
+								var road = new Road((iterX - c.X) * tileLength, crossroad, endCrossroad, lanes);
 								crossroad.East = road;
 								endCrossroad.West = road;
 								roadsList.Add(road);

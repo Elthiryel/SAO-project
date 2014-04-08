@@ -16,12 +16,14 @@ namespace SAO
 			return lastId;
 		}
 
-		public Road(int length, Crossroad firstCrossroad, Crossroad secondCrossroad)
+		public Road(int length, Crossroad firstCrossroad, Crossroad secondCrossroad, int laneCount)
 		{
 			Id = GetUniqueId();
 			Length = length;
 			First = firstCrossroad;
-			Second = secondCrossroad; // TODO what about lanes?
+			Second = secondCrossroad;
+			IncreasingLaneCount = laneCount;
+			DecreasingLaneCount = laneCount;
 		}
 
 		public int Id { get; set; }
