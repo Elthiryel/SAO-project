@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
+using System.Xml.Serialization;
 
 namespace SAO
 {
@@ -225,6 +227,45 @@ namespace SAO
 				Console.Out.Write(e.StackTrace);
 			}
 		}
+
+	    public static void FillRoutes(ProblemInstance problemInstance, String inputFileName)
+	    {
+            var serializer = new XmlSerializer(typeof(RoutesList));
+
+            using (var reader = new StreamReader(inputFileName))
+            {
+                var routesSerialized = (RoutesList)serializer.Deserialize(reader);
+                foreach (var route in routesSerialized.Routes)
+                {
+                    //create routes
+                }
+            }
+            
+	    }
 	}
+
+    [Serializable()]
+    [XmlRoot("RoutesList")]
+    public class RoutesList
+    {
+        [XmlArray("Routes")]
+        [XmlArrayItem("RouteData", typeof(RouteData))]
+        public List<RouteData> Routes { get; set; }
+    }
+
+    [Serializable()]
+    public class RouteData
+    {
+        [XmlArray("Crossroads")]
+        [XmlArrayItem("CrossroadData", typeof(CrossroadData))]
+        public List<CrossroadData> Crossroads { get; set; }
+        public int Rate { get; set; }
+    }
+
+    [Serializable()]
+    public class CrossroadData
+    {
+        public int Crossroad { get; set; }
+    }
 }
 
