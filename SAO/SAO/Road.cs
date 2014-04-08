@@ -16,7 +16,7 @@ namespace SAO
 			return lastId;
 		}
 
-		public Road(int length, Crossroad firstCrossroad, Crossroad secondCrossroad, int laneCount)
+		public Road(int length, Crossroad firstCrossroad, Crossroad secondCrossroad, int laneCount, Orientation orientation)
 		{
 			Id = GetUniqueId();
 			Length = length;
@@ -24,9 +24,12 @@ namespace SAO
 			Second = secondCrossroad;
 			IncreasingLaneCount = laneCount;
 			DecreasingLaneCount = laneCount;
+			Orientation = orientation;
 		}
 
 		public int Id { get; set; }
+
+		public Orientation Orientation { get; set; }
 
         //get later from Crossroads
         public int Y { get; set; } // what is x or y? road is NOT a point :P
@@ -50,4 +53,9 @@ namespace SAO
             
         }
     }
+
+	public enum Orientation {
+		NorthSouth,
+		EastWest
+	}
 }

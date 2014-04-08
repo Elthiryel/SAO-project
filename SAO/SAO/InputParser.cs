@@ -76,6 +76,13 @@ namespace SAO
 						int iterY = c.Y + 1;
 						while (true)
 						{
+							if (iterY >= ySize)
+							{
+								var road = new Road((iterY - c.Y - 1) * tileLength, crossroad, null, lanes, Orientation.NorthSouth);
+								crossroad.South = road;
+								roadsList.Add(road);
+								break;
+							}
 							char tile = tiles[iterY, c.X];
 							if (tile == '-')
 							{
@@ -89,7 +96,7 @@ namespace SAO
 							else if (tile == 'X')
 							{
 								var endCrossroad = crossroadsDict[new Coordinates(iterY, c.X)];
-								var road = new Road((iterY - c.Y) * tileLength, crossroad, endCrossroad, lanes);
+								var road = new Road((iterY - c.Y) * tileLength, crossroad, endCrossroad, lanes, Orientation.NorthSouth);
 								crossroad.South = road;
 								endCrossroad.North = road;
 								roadsList.Add(road);
@@ -108,6 +115,13 @@ namespace SAO
 						int iterX = c.X + 1;
 						while (true)
 						{
+							if (iterX >= xSize)
+							{
+								var road = new Road((iterX - c.X - 1) * tileLength, crossroad, null, lanes, Orientation.EastWest);
+								crossroad.East = road;
+								roadsList.Add(road);
+								break;
+							}
 							char tile = tiles[c.Y, iterX];
 							if (tile == '-')
 							{
@@ -121,7 +135,7 @@ namespace SAO
 							else if (tile == 'X')
 							{
 								var endCrossroad = crossroadsDict[new Coordinates(c.Y, iterX)];
-								var road = new Road((iterX - c.X) * tileLength, crossroad, endCrossroad, lanes);
+								var road = new Road((iterX - c.X) * tileLength, crossroad, endCrossroad, lanes, Orientation.EastWest);
 								crossroad.East = road;
 								endCrossroad.West = road;
 								roadsList.Add(road);
@@ -131,6 +145,73 @@ namespace SAO
 							{
 								break;
 							}
+						}
+					}
+				}
+
+				for (int i = 0; i < ySize; ++i)
+				{
+					int lanes = 1;
+					int iterX = 0;
+					while (true) {
+						char tile = tiles[i, iterX];
+						if (tile == '-')
+						{
+							++iterX;
+						}
+						else if (tile == '=')
+						{
+							++iterX;
+							lanes = 2;
+						}
+						else if (tile == 'X')
+						{
+							if (iterX == 0)
+							{
+								break;
+							}
+							var endCrossroad = crossroadsDict[new Coordinates(i, iterX)];
+							var road = new Road(iterX * tileLength, null, endCrossroad, lanes, Orientation.EastWest);
+							roadsList.Add(road);
+							break;
+						}
+						else
+						{
+							break;
+						}
+					}
+				}
+
+				for (int i = 0; i < xSize; ++i)
+				{
+					int lanes = 1;
+					int iterY = 0;
+					while (true)
+					{
+						char tile = tiles[iterY, i];
+						if (tile == '-')
+						{
+							++iterY;
+						}
+						else if (tile == '=')
+						{
+							++iterY;
+							lanes = 2;
+						}
+						else if (tile == 'X')
+						{
+							if (iterY == 0)
+							{
+								break;
+							}
+							var endCrossroad = crossroadsDict[new Coordinates(iterY, i)];
+							var road = new Road(iterY * tileLength, null, endCrossroad, lanes, Orientation.NorthSouth);
+							roadsList.Add(road);
+							break;
+						}
+						else
+						{
+							break;
 						}
 					}
 				}

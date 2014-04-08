@@ -15,9 +15,18 @@ namespace SAO
 			InputParser.FillRoadsAndCrossroads(pi, "/home/elthiryel/Dokumenty/Mono/SAO-project/SAO/test.txt");
 			foreach (Road r in pi.Roads)
 			{
-				Console.Out.WriteLine("ROAD " + r.Id + ": " + r.Length + "; first: " + r.First.X + ", " + r.First.Y + 
-					"; second: " + r.Second.X + ", " + r.Second.Y + "; lanes: " + r.IncreasingLaneCount + ", " + 
-				    r.DecreasingLaneCount);
+				Console.Out.Write("ROAD " + r.Id + ": " + r.Length);
+				if (r.First != null)
+				{
+					Console.Out.Write("; first: " + r.First.X + ", " + r.First.Y);
+				}
+				if (r.Second != null)
+				{
+					Console.Out.Write("; second: " + r.Second.X + ", " + r.Second.Y);
+				}
+				Console.Out.Write( "; lanes: " + r.IncreasingLaneCount + ", " + r.DecreasingLaneCount);
+				Console.Out.Write( "; orientation: " + r.Orientation);
+				Console.Out.WriteLine();
 			}
 			foreach (Crossroad c in pi.Crossroads)
 			{
