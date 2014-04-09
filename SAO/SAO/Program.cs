@@ -13,25 +13,42 @@ namespace SAO
 			// TESTING PARSER
 			ProblemInstance pi = new ProblemInstance();
 			InputParser.FillRoadsAndCrossroads(pi, "test.txt");
-            InputParser.FillRoutes(pi,"routes.xml");
+            //InputParser.FillRoutes(pi,"routes.xml");
 			foreach (Road r in pi.Roads)
 			{
-				Console.Out.Write("ROAD " + r.Id + ": " + r.Length);
+				Console.Write("ROAD " + r.Id + ": " + r.Length);
 				if (r.First != null)
 				{
-					Console.Out.Write("; first: " + r.First.X + ", " + r.First.Y);
+					Console.Write("; first: " + r.First.X + ", " + r.First.Y);
 				}
 				if (r.Second != null)
 				{
-					Console.Out.Write("; second: " + r.Second.X + ", " + r.Second.Y);
+					Console.Write("; second: " + r.Second.X + ", " + r.Second.Y);
 				}
-				Console.Out.Write( "; lanes: " + r.IncreasingLaneCount + ", " + r.DecreasingLaneCount);
-				Console.Out.Write( "; orientation: " + r.Orientation);
-				Console.Out.WriteLine();
+				Console.Write( "; lanes: " + r.IncreasingLaneCount + ", " + r.DecreasingLaneCount);
+				Console.Write( "; orientation: " + r.Orientation);
+				Console.WriteLine();
 			}
 			foreach (Crossroad c in pi.Crossroads)
 			{
-				Console.Out.WriteLine("CROSSROAD " + c.Id + ": " + c.X + ", " + c.Y);
+				Console.Write("CROSSROAD " + c.Id + ": " + c.X + ", " + c.Y);
+				if (c.North != null)
+				{
+					Console.Write("; north: " + c.North.Id); 
+				}
+				if (c.South != null)
+				{
+					Console.Write("; south: " + c.South.Id); 
+				}
+				if (c.West != null)
+				{
+					Console.Write("; west: " + c.West.Id); 
+				}
+				if (c.East != null)
+				{
+					Console.Write("; east: " + c.East.Id); 
+				}
+				Console.WriteLine();
 			}
 
         }

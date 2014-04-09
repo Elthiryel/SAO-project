@@ -174,6 +174,7 @@ namespace SAO
 							}
 							var endCrossroad = crossroadsDict[new Coordinates(i, iterX)];
 							var road = new Road(iterX * tileLength, null, endCrossroad, lanes, Orientation.EastWest);
+							endCrossroad.West = road;
 							roadsList.Add(road);
 							break;
 						}
@@ -208,6 +209,7 @@ namespace SAO
 							}
 							var endCrossroad = crossroadsDict[new Coordinates(iterY, i)];
 							var road = new Road(iterY * tileLength, null, endCrossroad, lanes, Orientation.NorthSouth);
+							endCrossroad.North = road;
 							roadsList.Add(road);
 							break;
 						}
