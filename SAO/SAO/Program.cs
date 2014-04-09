@@ -13,7 +13,7 @@ namespace SAO
 			// TESTING PARSER
 			ProblemInstance pi = new ProblemInstance();
 			InputParser.FillRoadsAndCrossroads(pi, "test.txt");
-            //InputParser.FillRoutes(pi,"routes.xml");
+            InputParser.FillRoutes(pi,"routes.xml");
 			foreach (Road r in pi.Roads)
 			{
 				Console.Write("ROAD " + r.Id + ": " + r.Length);

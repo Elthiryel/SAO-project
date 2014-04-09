@@ -222,6 +222,7 @@ namespace SAO
 
 				problemInstance.Crossroads = new List<Crossroad>(crossroadsDict.Values);
 				problemInstance.Roads = roadsList;
+                problemInstance.Routes = new List<Route>();
 			}
 
 			catch (Exception e)

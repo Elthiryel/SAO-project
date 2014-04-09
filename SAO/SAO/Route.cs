@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SAO
 {
@@ -14,7 +15,10 @@ namespace SAO
         public int Priority { get; set; }
 
 		// distance will be computed
-		public int Distance { get; set; }
+	    public int Distance
+	    {
+	        get { return Roads.Sum(x => x.Length); }
+	    }
 	}
 }
 

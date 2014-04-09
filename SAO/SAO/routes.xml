@@ -3,13 +3,13 @@
 		<RouteData>
 			<Crossroads>
 				<CrossroadData>
-					<Direction>North</Direction>
+					<Direction>West</Direction>
 				</CrossroadData>
 				<CrossroadData>
 					<Crossroad>1</Crossroad>
 				</CrossroadData>
 				<CrossroadData>
-					<Crossroad>2</Crossroad>
+					<Crossroad>3</Crossroad>
 				</CrossroadData>
 				<CrossroadData>
 					<Direction>South</Direction>
