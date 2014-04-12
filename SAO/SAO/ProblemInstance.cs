@@ -16,5 +16,7 @@ namespace SAO
         {
             return null;
         }
+
+        public static int CarSpeed = 1;
     }
 }

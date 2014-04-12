@@ -35,8 +35,8 @@ namespace SAO
             foreach (var crossroad in Instance.Crossroads)
             {
                 SwitchLights(crossroad);
-                MoveCars(crossroad);
             }
+            MoveCars();
         }
 
         private void GenerateCars()
@@ -89,9 +89,92 @@ namespace SAO
             }
         }
 
-        public void MoveCars(Crossroad crossroad)
+        public void MoveCars()
         {
+            foreach (var road in Instance.Roads)
+            {
+                for (int i = 0; i < road.IncreasingLaneCount; i++)
+                {
+                    List<CarDistance> toDelete = new List<CarDistance>();
+                    foreach (var carDistance in road.IncreasingLanes[i])
+                    {
+                        if (carDistance.Distance > 0 && carDistance.Distance > ProblemInstance.CarSpeed)
+                            //check if exists empty space to move a car
+                            if (road.IncreasingLanes[i].Any(x => x.Distance + Car.Length > carDistance.Distance +
+                                                                 ProblemInstance.CarSpeed &&
+                                                                 x.Distance < carDistance.Distance))
+                            {
+                                //korek,wyznaczyc nowy distance
+                            }
+                            else
+                            {
+                                carDistance.Distance -= ProblemInstance.CarSpeed;
+                            }
+                        else
+                        {
+                            var leftoverSpeed = ProblemInstance.CarSpeed - carDistance.Distance;
+                            //todo: zmniejsz distance do 0 lub najmniejszej mozliwej wartosci
+                            carDistance.Distance = 0;
+                            //result == true if car left road after movement
+                            var result = MoveDependingOnLights(road.Second, carDistance, leftoverSpeed);
+
+                            if (result)
+                                toDelete.Add(carDistance);                           
+                        }                
+                    }
+
+                    foreach (var element in toDelete)
+                    {
+                        road.IncreasingLanes[i].Remove(element);
+                    }
+                }
+
+                for (int i = 0; i < road.DecreasingLaneCount; i++)
+                {
+                    List<CarDistance> toDelete = new List<CarDistance>();
+                    foreach (var carDistance in road.DecreasingLanes[i])
+                    {
+                        if (carDistance.Distance > 0 && carDistance.Distance > ProblemInstance.CarSpeed)
+                            //check if exists empty space to move a car
+                            if (road.DecreasingLanes[i].Any(x => x.Distance + Car.Length > carDistance.Distance +
+                                                                 ProblemInstance.CarSpeed &&
+                                                                 x.Distance < carDistance.Distance))
+                            {
+                                //korek,wyznaczyc nowy distance
+                            }
+                            else
+                            {
+                                carDistance.Distance -= ProblemInstance.CarSpeed;
+                            }
+                        else
+                        {
+                            var leftoverSpeed = ProblemInstance.CarSpeed - carDistance.Distance;
+                            //todo: zmniejsz distance do 0 lub najmniejszej mozliwej wartosci
+                            carDistance.Distance = 0;
+                            //result == true if car left road after movement
+                            var result = MoveDependingOnLights(road.First, carDistance, leftoverSpeed);
+
+                            if (result)
+                                toDelete.Add(carDistance);
+                        }
+                    }
+
+                    foreach (var element in toDelete)
+                    {
+                        road.DecreasingLanes[i].Remove(element);
+                    }
+                }
+            }
             //if end route, add to ArchivedCarData
+        }
+
+        private bool MoveDependingOnLights(Crossroad crossroad, CarDistance carDistance, int leftoverSpeed)
+        {
+            //check lights and move car if green and no delay
+            //determine here where car should ride
+            //add carDistance to new road if car left crossroad
+            //true if car left road
+            return true;
         }
 
         public double ComputeResult()

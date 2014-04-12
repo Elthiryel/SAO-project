@@ -48,9 +48,46 @@ namespace SAO
         public LinkedList<CarDistance>[] IncreasingLanes { get; set; }
         public LinkedList<CarDistance>[] DecreasingLanes { get; set; }
 
-        public void AddCarToLinkedListWithParameterDistance()
+        public void AddCarToIncreasingLane(Car car,int distanceFromCrossroad)
         {
-            
+            var targetLaneIndex = GetEmptiestIncreasingLane();
+            IncreasingLanes[targetLaneIndex].AddLast(new CarDistance(car, distanceFromCrossroad));
+        }
+
+        public void AddCarToDecreasingLane(Car car, int distanceFromCrossroad)
+        {
+            var targetLaneIndex = GetEmptiestDecreasingLane();
+            DecreasingLanes[targetLaneIndex].AddLast(new CarDistance(car, distanceFromCrossroad));
+        }
+
+        public int GetEmptiestIncreasingLane()
+        {
+            var min = IncreasingLanes[0].Count;
+            var laneIndex = 0;
+            for (int i = 0; i < IncreasingLaneCount; i++)
+            {
+                if (IncreasingLanes[i].Count < min)
+                {
+                    min = IncreasingLanes[i].Count;
+                    laneIndex = i;
+                }
+            }
+            return laneIndex;
+        }
+
+        public int GetEmptiestDecreasingLane()
+        {
+            var min = DecreasingLanes[0].Count;
+            var laneIndex = 0;
+            for (int i = 0; i < DecreasingLaneCount; i++)
+            {
+                if (DecreasingLanes[i].Count < min)
+                {
+                    min = DecreasingLanes[i].Count;
+                    laneIndex = i;
+                }
+            }
+            return laneIndex;
         }
     }
 
