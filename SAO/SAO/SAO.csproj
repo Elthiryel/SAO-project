@@ -46,6 +46,7 @@
     <Compile Include="Car.cs" />
     <Compile Include="CarDistance.cs" />
     <Compile Include="Crossroad.cs" />
+    <Compile Include="ProblemController.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Road.cs" />

@@ -11,5 +11,13 @@ namespace SAO
         public int NorthSouthDuration { get; set; }
         public int WestEastDuration { get; set; }
         public int TimeShift { get; set; }
+
+        public int CycleDuration
+        {
+            get { return NorthSouthDuration + WestEastDuration; }
+        }
+
+        public TrafficLightsState StartingState { get; set; }
+
     }
 }

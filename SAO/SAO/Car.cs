@@ -11,5 +11,6 @@ namespace SAO
         public static int Length = 2;
 
 		public Route Route { get; set; }
+        public int TimeSinceDeparture { get; set; }
     }
 }

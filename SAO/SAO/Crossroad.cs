@@ -54,7 +54,15 @@ namespace SAO
                 list.RemoveAll(item => item == null);
                 return list;
             }
-        } 
+        }
+
+        public void SwitchLightState()
+        {
+            if (LightsState == TrafficLightsState.NorthSouth)
+                LightsState = TrafficLightsState.WestEast;
+            else
+                LightsState = TrafficLightsState.NorthSouth;
+        }
     }
 
     public enum TrafficLightsState
