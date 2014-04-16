@@ -12,11 +12,14 @@ namespace SAO
         public int Distance { get; set; }
         //Delay matters only when Distance = 0 and turn is left/right; Delay differs for left and right
         public int Delay { get; set; }
+        public bool Stopped { get; set; }
+        public Road Road { get; private set; }
 
-        public CarDistance(Car car, int distance)
+        public CarDistance(Car car, int distance,Road road)
         {
             this.Car = Car;
             this.Distance = distance;
+            this.Road = road;
         }
     }
 }

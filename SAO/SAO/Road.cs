@@ -51,13 +51,13 @@ namespace SAO
         public void AddCarToIncreasingLane(Car car,int distanceFromCrossroad)
         {
             var targetLaneIndex = GetEmptiestIncreasingLane();
-            IncreasingLanes[targetLaneIndex].AddLast(new CarDistance(car, distanceFromCrossroad));
+            IncreasingLanes[targetLaneIndex].AddLast(new CarDistance(car, distanceFromCrossroad,this));
         }
 
         public void AddCarToDecreasingLane(Car car, int distanceFromCrossroad)
         {
             var targetLaneIndex = GetEmptiestDecreasingLane();
-            DecreasingLanes[targetLaneIndex].AddLast(new CarDistance(car, distanceFromCrossroad));
+            DecreasingLanes[targetLaneIndex].AddLast(new CarDistance(car, distanceFromCrossroad,this));
         }
 
         public int GetEmptiestIncreasingLane()

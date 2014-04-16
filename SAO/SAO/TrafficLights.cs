@@ -17,7 +17,7 @@ namespace SAO
             get { return NorthSouthDuration + WestEastDuration; }
         }
 
-        public TrafficLightsState StartingState { get; set; }
+        public Orientation StartingLightingState { get; set; }
 
     }
 }

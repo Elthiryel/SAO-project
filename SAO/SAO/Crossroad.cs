@@ -44,7 +44,7 @@ namespace SAO
 
 		public TrafficLights Lights { get; set; }
 
-        public TrafficLightsState LightsState { get; set; }
+        public Orientation LightsState { get; set; }
 
         public List<Road> Roads
         {
@@ -58,10 +58,10 @@ namespace SAO
 
         public void SwitchLightState()
         {
-            if (LightsState == TrafficLightsState.NorthSouth)
-                LightsState = TrafficLightsState.WestEast;
+            if (LightsState == Orientation.NorthSouth)
+                LightsState = Orientation.EastWest;
             else
-                LightsState = TrafficLightsState.NorthSouth;
+                LightsState = Orientation.NorthSouth;
         }
     }
 
