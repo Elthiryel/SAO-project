@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -8,6 +9,7 @@ namespace SAO
 {
     public class ProblemController
     {
+        private readonly Random random;
         public ProblemInstance Instance { get; private set; }
 
         public static int CurrentMoment { get; private set; }
@@ -18,18 +20,20 @@ namespace SAO
         {
             this.Instance = instance;
             this.ArchivedCarData = new List<Car>();
+            random = new Random(ProblemInstance.Seed);
         }
 
         //sekunda - najmniejsza niepodzielna jednostka czasu
-        public void Start(int durationInSeconds = 1000)
+        public void Start(int durationInSeconds = 10000)
         {
+            Console.WriteLine("Starting Instance for "+durationInSeconds+" seconds");
             for (CurrentMoment = 0; CurrentMoment < durationInSeconds; CurrentMoment++)
             {
                ProgressInstance();
             }
         }
 
-        public void ProgressInstance()
+        private void ProgressInstance()
         {
             GenerateCars();
             foreach (var crossroad in Instance.Crossroads)
@@ -41,7 +45,51 @@ namespace SAO
 
         private void GenerateCars()
         {
-            //place car on road just before lights?
+            //place car on road at the beginning?
+            foreach (var route in Instance.Routes)
+            {
+                var number = random.NextDouble() * 100.0 * (100.0 / route.Priority);
+                if (number < ProblemInstance.ChanceToGenerate)
+                {
+                    var road = route.Roads[0];
+                    var nextRoad = route.Roads[1];
+                    Crossroad crossroad = null;
+                    if (road.First == null)
+                        crossroad = road.Second;
+                    if (road.Second == null)
+                        crossroad = road.First;
+                    if (nextRoad.First == null)
+                        crossroad = nextRoad.Second;
+                    if (nextRoad.Second == null)
+                        crossroad = nextRoad.First;
+                    if (crossroad == null && (road.First.Id == nextRoad.First.Id || road.First.Id == nextRoad.Second.Id))
+                        crossroad = road.First;
+                    else if(crossroad == null)
+                        crossroad = road.Second;
+                    var direction = DetermineDirection(crossroad, road);
+                    var delayDirection = DetermineDirection(crossroad, nextRoad);
+                    switch (direction)
+                    {
+                        case Direction.East:
+                            road.AddCarToDecreasingLane(new Car(CurrentMoment, route), road.Length - Car.Length,
+                                ComputeDelay(Direction.West, delayDirection));
+                            break;
+                        case Direction.North:
+                            road.AddCarToIncreasingLane(new Car(CurrentMoment, route), road.Length - Car.Length,
+                                ComputeDelay(Direction.South, delayDirection));
+                            break;
+                        case Direction.West:
+                            road.AddCarToIncreasingLane(new Car(CurrentMoment, route), road.Length - Car.Length,
+                                ComputeDelay(Direction.East, delayDirection));
+                            break;
+                        case Direction.South:
+                            road.AddCarToDecreasingLane(new Car(CurrentMoment, route), road.Length - Car.Length,
+                                ComputeDelay(Direction.North, delayDirection));
+                            break;
+
+                    }
+                }
+            }
         }
 
         private void SwitchLights(Crossroad crossroad)
@@ -89,19 +137,19 @@ namespace SAO
             }
         }
 
-        public void MoveCars()
+        private void MoveCars()
         {
             var finishedCars = new List<Car>();
             foreach (var road in Instance.Roads)
             {
                 for (int i = 0; i < road.IncreasingLaneCount; i++)
                 {
-                    ProcessCars(road.IncreasingLanes[i], road.Second, finishedCars);
+                    ProcessCars(road.IncreasingLanes[i], road.Second, finishedCars, true);
                 }
 
                 for (int i = 0; i < road.DecreasingLaneCount; i++)
                 {
-                   ProcessCars(road.DecreasingLanes[i], road.First, finishedCars);
+                   ProcessCars(road.DecreasingLanes[i], road.First, finishedCars, false);
                 }
             }
 
@@ -112,7 +160,7 @@ namespace SAO
             }
         }
 
-        private void ProcessCars(LinkedList<CarDistance> lane,Crossroad crossroad, List<Car> finishedCars )
+        private void ProcessCars(LinkedList<CarDistance> lane,Crossroad crossroad, List<Car> finishedCars, bool fromIncreasingLane )
         {
             List<CarDistance> toDelete = new List<CarDistance>();
             foreach (var carDistance in lane)
@@ -141,7 +189,7 @@ namespace SAO
                     // zmniejsz distance do 0 lub todo:najmniejszej mozliwej wartosci
                     carDistance.Distance = 0;
                     //result == true if car left road after movement
-                    var result = MoveDependingOnLights(crossroad, carDistance, leftoverSpeed, finishedCars);
+                    var result = MoveDependingOnLights(crossroad, carDistance, leftoverSpeed, finishedCars, fromIncreasingLane);
 
                     if (result)
                         toDelete.Add(carDistance);
@@ -154,7 +202,7 @@ namespace SAO
             }
         }
 
-        private bool MoveDependingOnLights(Crossroad crossroad, CarDistance carDistance, int leftoverSpeed, List<Car> finishedCars )
+        private bool MoveDependingOnLights(Crossroad crossroad, CarDistance carDistance, int leftoverSpeed, List<Car> finishedCars, bool fromIncreasingLane )
         {
             //koniec mapy
             if (crossroad == null)
@@ -175,27 +223,118 @@ namespace SAO
                 return false;
             }
 
+            var road = carDistance.Car.NextRoad;
+
             //koniec, samochod dojechal do konca skrzyzowania
-            if (carDistance.Car.NextRoad == null)
+            if (road == null)
             {
                 finishedCars.Add(carDistance.Car);
                 return true;
             }
-                
 
+            Direction direction = DetermineDirection(crossroad,road);
+            
+            //setDelay
+            int delay = 0;
+            if (carDistance.Car.Route.Roads.Count >= carDistance.Car.RoadProgress + 2)
+            {
+                var delayRoad = carDistance.Car.Route.Roads[carDistance.Car.RoadProgress + 1];
+                if (delayRoad != null)
+                {
+                    var delayCrossroad = road.First;
+                    if (road.First != null && road.First.Id == crossroad.Id)
+                        delayCrossroad = road.Second;
 
-            //check if there is space on next road 
-            //check lights and move car if green and no delay
-            //determine here where car should ride
-            //add carDistance to new road if car left crossroad and set next delay!
-            //true if car left road
-            return true;
+                    if (delayCrossroad != null)
+                    {
+                        var delayDirection = DetermineDirection(delayCrossroad, delayRoad);
+                        delay = ComputeDelay(direction, delayDirection);
+                    }
+                }
+            }
+            
+            switch (direction)
+            {
+                case Direction.North:
+                    return road.AddCarToDecreasingLane(carDistance.Car, road.Length - leftoverSpeed - Car.Length, delay);
+                case Direction.East:
+                    return road.AddCarToIncreasingLane(carDistance.Car, road.Length - leftoverSpeed - Car.Length, delay);
+                case Direction.South:
+                    return road.AddCarToIncreasingLane(carDistance.Car, road.Length - leftoverSpeed - Car.Length, delay);
+                case Direction.West:
+                    return road.AddCarToDecreasingLane(carDistance.Car, road.Length - leftoverSpeed - Car.Length, delay);
+            }
+
+            return false;
+        }
+
+        private int ComputeDelay(Direction direction, Direction delayDirection)
+        {
+            //jazda prosto
+            if (direction == delayDirection)
+                return 0;
+            if (direction == Direction.East && delayDirection == Direction.North)
+                return ProblemInstance.LeftTurnDelay;
+            if (direction == Direction.North && delayDirection == Direction.West)
+                return ProblemInstance.LeftTurnDelay;
+            if (direction == Direction.West && delayDirection == Direction.South)
+                return ProblemInstance.LeftTurnDelay;
+            if (direction == Direction.South && delayDirection == Direction.East)
+                return ProblemInstance.LeftTurnDelay;
+            if (direction == Direction.East && delayDirection == Direction.South)
+                return ProblemInstance.RightTurnDelay;
+            if (direction == Direction.North && delayDirection == Direction.East)
+                return ProblemInstance.RightTurnDelay;
+            if (direction == Direction.West && delayDirection == Direction.North)
+                return ProblemInstance.RightTurnDelay;
+            if (direction == Direction.South && delayDirection == Direction.West)
+                return ProblemInstance.RightTurnDelay;
+            throw new Exception("Could not compute delay");
+
+        }
+
+        private Direction DetermineDirection(Crossroad crossroad, Road road)
+        {
+            if (crossroad.North != null && crossroad.North.Id == road.Id)
+                return Direction.North;
+            if (crossroad.South != null && crossroad.South.Id == road.Id)
+                return Direction.South;
+            if (crossroad.East != null && crossroad.East.Id == road.Id)
+                return Direction.East;
+            if (crossroad.West != null && crossroad.West.Id == road.Id)
+                return Direction.West;
+            throw new Exception("Cannot determine direction");
         }
 
         public double ComputeResult()
         {
+            int sumTime = 0;
+            foreach (var car in ArchivedCarData)
+                sumTime += car.TimeSinceDeparture;
             //zwraca wartosc funkcji minimalizujacej na podstawie ArchivedCarData z czasami
-            return 1.0;
+            return (double) sumTime /  ArchivedCarData.Count;
+        }
+
+        public Dictionary<Route, double> ComputeEachRoute()
+        {
+            var dict = new Dictionary<Route, double>();
+            var countersdict = new Dictionary<Route, int>();
+            foreach (var car in ArchivedCarData)
+            {
+                if (dict.ContainsKey(car.Route))
+                    dict[car.Route] = dict[car.Route] + car.TimeSinceDeparture;
+                else
+                    dict[car.Route] = car.TimeSinceDeparture;
+                if (countersdict.ContainsKey(car.Route))
+                    countersdict[car.Route]++;
+                else
+                    countersdict[car.Route] = 1;
+            }
+            foreach (var route in countersdict.Keys)
+            {
+                dict[route] = dict[route]/countersdict[route];
+            }
+            return dict;
         }
     }
 }

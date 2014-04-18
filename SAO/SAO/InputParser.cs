@@ -271,7 +271,7 @@ namespace SAO
                     {
                         AddRoad(roads, currentDirection, currentCrossroad);
                     }
-                    problemInstance.Routes.Add(new Route(roads, route.Rate));
+                    problemInstance.Routes.Add(new Route(roads, route.Rate, route.Id));
                 }
             }
             
@@ -317,6 +317,7 @@ namespace SAO
         [XmlArrayItem("CrossroadData", typeof(CrossroadData))]
         public List<CrossroadData> Crossroads { get; set; }
         public int Rate { get; set; }
+        public int Id { get; set; }
     }
 
     [Serializable()]

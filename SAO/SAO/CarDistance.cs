@@ -15,11 +15,12 @@ namespace SAO
         public bool Stopped { get; set; }
         public Road Road { get; private set; }
 
-        public CarDistance(Car car, int distance,Road road)
+        public CarDistance(Car car, int distance,Road road, int delay = 0 )
         {
-            this.Car = Car;
+            this.Car = car;
             this.Distance = distance;
             this.Road = road;
+            this.Delay = delay;
         }
     }
 }

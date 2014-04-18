@@ -14,6 +14,7 @@ namespace SAO
 			ProblemInstance pi = new ProblemInstance();
 			InputParser.FillRoadsAndCrossroads(pi, "test.txt");
             InputParser.FillRoutes(pi,"routes.xml");
+            /*
 			foreach (Road r in pi.Roads)
 			{
 				Console.Write("ROAD " + r.Id + ": " + r.Length);
@@ -49,8 +50,25 @@ namespace SAO
 					Console.Write("; east: " + c.East.Id); 
 				}
 				Console.WriteLine();
-			}
-
+			}*/
+            ProblemController controller = new ProblemController(pi);
+            Dictionary<int,TrafficLights> lightsConfig = new Dictionary<int, TrafficLights>();
+            TrafficLights lights = new TrafficLights(10,30,6);
+            foreach (var crossroad in pi.Crossroads)
+            {
+                lightsConfig.Add(crossroad.Id,lights);
+            }
+            controller.SetTrafficLightsConfiguration(lightsConfig);
+            controller.Start(10000);
+            var result = controller.ComputeResult();
+            Console.WriteLine("Average route time in seconds: "+result);
+            Console.WriteLine(String.Format("Total number of cars: {0}",controller.ArchivedCarData.Count));
+            var dict = controller.ComputeEachRoute();
+            foreach (var route in dict.Keys)
+            {
+                Console.WriteLine("Average route time in seconds: " + dict[route]+ " for Route number "+route.Id);
+            }
+            Console.ReadKey();
         }
     }
 }

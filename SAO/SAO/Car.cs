@@ -17,7 +17,7 @@ namespace SAO
 
         public int TimeSinceDeparture
         {
-            get { return IsFinished ? _finishedTime : ProblemController.CurrentMoment - _createTime; } 
+            get { return IsFinished ? _finishedTime - _createTime : ProblemController.CurrentMoment - _createTime; } 
         }
 
         private bool _isFinished;
@@ -34,9 +34,11 @@ namespace SAO
 
         public int RoadProgress { get; set; }
 
-        public Car(int createTime)
+        public Car(int createTime,Route route)
         {
             this._createTime = createTime;
+            this.RoadProgress = 0;
+            this.Route = route;
         }
 
         public Road NextRoad 

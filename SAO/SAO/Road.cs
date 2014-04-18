@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -25,6 +26,13 @@ namespace SAO
 			IncreasingLaneCount = laneCount;
 			DecreasingLaneCount = laneCount;
 			Orientation = orientation;
+            IncreasingLanes = new LinkedList<CarDistance>[laneCount];
+            DecreasingLanes = new LinkedList<CarDistance>[laneCount];
+		    for (int i = 0; i < laneCount; i++)
+		    {
+                IncreasingLanes[i] = new LinkedList<CarDistance>();
+                DecreasingLanes[i] = new LinkedList<CarDistance>();
+		    }         
 		}
 
 		public int Id { get; set; }
@@ -48,16 +56,54 @@ namespace SAO
         public LinkedList<CarDistance>[] IncreasingLanes { get; set; }
         public LinkedList<CarDistance>[] DecreasingLanes { get; set; }
 
-        public void AddCarToIncreasingLane(Car car,int distanceFromCrossroad)
+        public bool AddCarToIncreasingLane(Car car,int distanceFromCrossroad,int delay = 0)
         {
             var targetLaneIndex = GetEmptiestIncreasingLane();
-            IncreasingLanes[targetLaneIndex].AddLast(new CarDistance(car, distanceFromCrossroad,this));
+            if (SpaceOnEnterIncreasingLane(targetLaneIndex))
+            {
+                car.RoadProgress ++;
+                IncreasingLanes[targetLaneIndex].AddLast(new CarDistance(car, distanceFromCrossroad, this, delay));
+            }
+            else
+            {
+                targetLaneIndex = SpaceOnEnterIncreasingLane();
+                if (targetLaneIndex != -1)
+                {
+                    car.RoadProgress++;
+                    IncreasingLanes[targetLaneIndex].AddLast(new CarDistance(car, distanceFromCrossroad, this, delay));
+                }
+                    else
+                {
+                    return false;
+                }
+            }
+            return true;
         }
 
-        public void AddCarToDecreasingLane(Car car, int distanceFromCrossroad)
+        public bool AddCarToDecreasingLane(Car car, int distanceFromCrossroad,int delay = 0)
         {
             var targetLaneIndex = GetEmptiestDecreasingLane();
-            DecreasingLanes[targetLaneIndex].AddLast(new CarDistance(car, distanceFromCrossroad,this));
+            if (SpaceOnEnterDecreasingLane(targetLaneIndex))
+            {
+                car.RoadProgress++;
+                DecreasingLanes[targetLaneIndex].AddLast(new CarDistance(car, distanceFromCrossroad, this, delay));
+            }
+                
+            else
+            {
+                targetLaneIndex = SpaceOnEnterDecreasingLane();
+                if (targetLaneIndex != -1)
+                {
+                    car.RoadProgress++;
+                    DecreasingLanes[targetLaneIndex].AddLast(new CarDistance(car, distanceFromCrossroad, this, delay));
+                }
+                    
+                else
+                {
+                    return false;
+                }
+            }
+            return true;
         }
 
         public int GetEmptiestIncreasingLane()
@@ -88,6 +134,48 @@ namespace SAO
                 }
             }
             return laneIndex;
+        }
+
+        public int SpaceOnEnterDecreasingLane()
+        {
+            for (int i = 0; i < DecreasingLaneCount; i++)
+            {
+                if(DecreasingLanes[i].Last.Value.Distance + 2*Car.Length > this.Length)
+                    continue;
+                return i;
+                
+            }
+            return -1;
+        }
+
+        public bool SpaceOnEnterDecreasingLane(int laneIndex)
+        {
+            if (DecreasingLanes[laneIndex].Count == 0)
+                return true;
+            if (DecreasingLanes[laneIndex].Last.Value.Distance + 2*Car.Length > this.Length)
+                return false;
+            return true;
+        }
+
+        public bool SpaceOnEnterIncreasingLane(int laneIndex)
+        {
+            if (IncreasingLanes[laneIndex].Count == 0)
+                return true;
+            if (IncreasingLanes[laneIndex].Last.Value.Distance + 2 * Car.Length > this.Length)
+                return false;
+            return true;
+        }
+
+        public int SpaceOnEnterIncreasingLane()
+        {
+            for (int i = 0; i < IncreasingLaneCount; i++)
+            {
+                if (IncreasingLanes[i].Last.Value.Distance + 2 * Car.Length > this.Length)
+                    continue;
+                return i;
+
+            }
+            return -1;
         }
     }
 
