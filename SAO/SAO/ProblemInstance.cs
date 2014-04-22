@@ -23,5 +23,21 @@ namespace SAO
         //chance to generate a car with route rate 100
         public static double ChanceToGenerate = 2.0;
         public static int Seed = 16431;
+
+        public void CleanInstance()
+        {
+            foreach (var road in Roads)
+            {
+                for (int i = 0; i < road.IncreasingLaneCount; i++)
+                {
+                    road.IncreasingLanes[i].Clear();
+                }
+
+                for (int j = 0; j < road.DecreasingLaneCount; j++)
+                {
+                    road.DecreasingLanes[j].Clear();
+                }
+            }
+        }
     }
 }
