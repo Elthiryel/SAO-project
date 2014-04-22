@@ -54,6 +54,8 @@
     <Compile Include="Route.cs" />
     <Compile Include="InputParser.cs" />
     <Compile Include="ProblemInstance.cs" />
+    <Compile Include="IAlgorithm.cs" />
+    <Compile Include="RandomStartGeneticAlgorithm.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

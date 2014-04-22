@@ -13,7 +13,7 @@ namespace SAO
 			// TESTING PARSER
 			ProblemInstance pi = new ProblemInstance();
 			InputParser.FillRoadsAndCrossroads(pi, "test.txt");
-            InputParser.FillRoutes(pi,"routes.xml");
+            InputParser.FillRoutes(pi, "routes.xml");
             /*
 			foreach (Road r in pi.Roads)
 			{
@@ -51,11 +51,11 @@ namespace SAO
 				}
 				Console.WriteLine();
 			}*/
-            ProblemController controller = new ProblemController(pi);
+            /*ProblemController controller = new ProblemController(pi);
             Dictionary<int,TrafficLights> lightsConfig = new Dictionary<int, TrafficLights>();
-            TrafficLights lights = new TrafficLights(10,30,6);
             foreach (var crossroad in pi.Crossroads)
             {
+				TrafficLights lights = new TrafficLights(10,30,6);
                 lightsConfig.Add(crossroad.Id,lights);
             }
             controller.SetTrafficLightsConfiguration(lightsConfig);
@@ -63,12 +63,18 @@ namespace SAO
             var result = controller.ComputeResult();
             Console.WriteLine("Average route time in seconds: "+result);
             Console.WriteLine(String.Format("Total number of cars: {0}",controller.ArchivedCarData.Count));
-            var dict = controller.ComputeEachRoute();
+			Dictionary<Route, int> carCount;
+            var dict = controller.ComputeEachRoute(out carCount);
             foreach (var route in dict.Keys)
             {
-                Console.WriteLine("Average route time in seconds: " + dict[route]+ " for Route number "+route.Id);
+                Console.WriteLine("Average route time in seconds: " + dict[route] + " for Route number "+ route.Id + 
+				                  " (" + carCount[route] + " cars)");
             }
-            Console.ReadKey();
+            Console.ReadKey(); */
+			var algorithm = new RandomStartGeneticAlgorithm(pi, 10, 1, 10000);
+			algorithm.Run();
+			var result = algorithm.GetResult();
+			Console.WriteLine("END");
         }
     }
 }

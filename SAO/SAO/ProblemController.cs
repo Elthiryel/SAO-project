@@ -315,7 +315,7 @@ namespace SAO
             return (double) sumTime /  ArchivedCarData.Count;
         }
 
-        public Dictionary<Route, double> ComputeEachRoute()
+        public Dictionary<Route, double> ComputeEachRoute(out Dictionary<Route, int> carCount)
         {
             var dict = new Dictionary<Route, double>();
             var countersdict = new Dictionary<Route, int>();
@@ -334,7 +334,9 @@ namespace SAO
             {
                 dict[route] = dict[route]/countersdict[route];
             }
+			carCount = countersdict;
             return dict;
         }
+
     }
 }

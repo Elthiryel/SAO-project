@@ -34,6 +34,16 @@ namespace SAO
 	        }
 	        return true;
 	    }
+
+		public override int GetHashCode()
+		{
+			var toReturn = Roads.Count;
+			foreach (var road in Roads)
+			{
+				toReturn += road.Id;
+			}
+			return toReturn;
+		}
 	}
 }
 
