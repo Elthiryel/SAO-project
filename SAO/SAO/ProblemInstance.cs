@@ -21,7 +21,7 @@ namespace SAO
         public static int LeftTurnDelay = 2;
         public static int RightTurnDelay = 1;
         //chance to generate a car with route rate 100
-        public static double ChanceToGenerate = 2.0;
+        public static double ChanceToGenerate = 4.0;
         public static int Seed = 16431;
 
         public void CleanInstance()

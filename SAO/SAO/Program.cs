@@ -71,10 +71,10 @@ namespace SAO
 				                  " (" + carCount[route] + " cars)");
             }
             Console.ReadKey(); */
-			var algorithm = new RandomStartGeneticAlgorithm(pi, 10, 1, 10000);
+			var algorithm = new RandomStartGeneticAlgorithm(pi, 20, 50, 10000);
 			algorithm.Run();
 			var result = algorithm.GetResult();
-			Console.WriteLine("END");
+			Console.WriteLine("END, result: " + result);
         }
     }
 }

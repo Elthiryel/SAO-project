@@ -35,6 +35,7 @@ namespace SAO
 			for (var i = 0; i < iterationCount; ++i)
 			{
 				PerformIteration();
+				Console.WriteLine("iteration " + i + ": " + bestVelocity);
 			}
 		}
 
@@ -114,23 +115,17 @@ namespace SAO
 		private void PerformIteration()
 		{
 			var simulationResult = new List<double>(phenotypeCount);
+			//Console.WriteLine("--- --- ---");
 			for (var i = 0; i < phenotypeCount; ++i)
 			{
-
-				foreach (var p in phenotypes[i].Values)
-				{
-					Console.WriteLine(p.NorthSouthDuration + ", " + p.WestEastDuration + ", " + p.TimeShift);
-				}
-
 				var controller = new ProblemController(problemInstance);
 				controller.SetTrafficLightsConfiguration(phenotypes[i]);
 				controller.Start(secondCount);
-
-				Console.WriteLine(controller.ComputeResult());
-
 				var averageVelocity = ComputeAverageVelocity(controller);
+				//Console.Write(averageVelocity + ", ");
 				simulationResult.Add(averageVelocity);
 			}
+			//Console.WriteLine("--- --- ---");
 			SetBest(simulationResult);
 			PerformEvolution(simulationResult);
 		}
@@ -140,10 +135,10 @@ namespace SAO
 			double sum = 0;
 			int cars = 0;
 			Dictionary<Route, int> carCount;
-			var velocityForRoutes = controller.ComputeEachRoute(out carCount);
-			foreach (var route in velocityForRoutes.Keys)
+			var timeForRoutes = controller.ComputeEachRoute(out carCount);
+			foreach (var route in timeForRoutes.Keys)
 			{
-				sum += velocityForRoutes[route] * carCount[route];
+				sum += carCount[route] * route.Distance / timeForRoutes[route];
 				cars += carCount[route];
 			}
 			return sum / cars;
@@ -199,7 +194,7 @@ namespace SAO
 			{
 				var first = random.Next(phenotypeCount);
 				var second = random.Next(phenotypeCount);
-				newPhenotypes.Add(Crossover(bestConfigurations[first], bestConfigurations[second]));
+				newPhenotypes.Add(Crossover(phenotypes[first], phenotypes[second]));
 			}
 			phenotypes = newPhenotypes;
 		}

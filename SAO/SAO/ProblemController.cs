@@ -27,7 +27,7 @@ namespace SAO
         public void Start(int durationInSeconds = 10000)
         {
             Instance.CleanInstance();
-            Console.WriteLine("Starting Instance for "+durationInSeconds+" seconds");
+            //Console.WriteLine("Starting Instance for "+durationInSeconds+" seconds");
             for (CurrentMoment = 0; CurrentMoment < durationInSeconds; CurrentMoment++)
             {
                ProgressInstance();
