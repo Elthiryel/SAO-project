@@ -25,6 +25,10 @@ namespace SAO
 	    public override bool Equals(object obj)
 	    {
 	        var route = obj as Route;
+			if (route == null)
+			{
+				return false;
+			}
 	        if (this.Roads.Count != route.Roads.Count)
 	            return false;
 	        for (int i = 0; i < this.Roads.Count; i++)
