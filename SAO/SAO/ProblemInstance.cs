@@ -17,7 +17,7 @@ namespace SAO
             return null;
         }
 
-        public static int CarSpeed = 1;
+        public static int CarSpeed = 10;
         public static int LeftTurnDelay = 2;
         public static int RightTurnDelay = 1;
         //chance to generate a car with route rate 100

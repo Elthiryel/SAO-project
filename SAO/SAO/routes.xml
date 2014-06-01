@@ -170,6 +170,9 @@
 		</RouteData>
     <RouteData>
 			<Crossroads>
+        <CrossroadData>
+          <Direction>East</Direction>
+        </CrossroadData>
 				<CrossroadData>
 					<Crossroad>12</Crossroad>
 				</CrossroadData>
@@ -194,6 +197,12 @@
 		</RouteData>
     <RouteData>
 			<Crossroads>
+        <CrossroadData>
+          <Direction>West</Direction>
+        </CrossroadData>
+        <CrossroadData>
+          <Crossroad>10</Crossroad>
+        </CrossroadData>
 				<CrossroadData>
 					<Crossroad>11</Crossroad>
 				</CrossroadData>
@@ -245,6 +254,9 @@
 		</RouteData>
     <RouteData>
 			<Crossroads>
+        <CrossroadData>
+          <Direction>West</Direction>
+        </CrossroadData>
 				<CrossroadData>
 					<Crossroad>1</Crossroad>
 				</CrossroadData>
