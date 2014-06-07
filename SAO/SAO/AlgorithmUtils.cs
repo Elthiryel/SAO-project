@@ -51,14 +51,18 @@ namespace SAO
 
 		public static Dictionary<int, TrafficLights> Mutation(List<Crossroad> crossroads, 
 		                                                      Dictionary<int, TrafficLights> oldPhenotype,
+		                                                      int randomizationLevel,
 		                                                      Random random)
 		{
 			var phenotype = new Dictionary<int, TrafficLights>();
 			foreach (var crossroad in crossroads)
 			{
-				int northSouthDuration = oldPhenotype[crossroad.Id].NorthSouthDuration + random.Next(-10, 11);
-				int westEastDuration = oldPhenotype[crossroad.Id].WestEastDuration + random.Next(-10, 11);
-				int timeShift = oldPhenotype[crossroad.Id].TimeShift + random.Next(-10, 11);
+				int northSouthDuration = oldPhenotype[crossroad.Id].NorthSouthDuration + 
+					random.Next(-randomizationLevel, randomizationLevel + 1);
+				int westEastDuration = oldPhenotype[crossroad.Id].WestEastDuration + 
+					random.Next(-randomizationLevel, randomizationLevel + 1);
+				int timeShift = oldPhenotype[crossroad.Id].TimeShift + 
+					random.Next(-randomizationLevel, randomizationLevel + 1);
 				northSouthDuration = KeepInBounds(northSouthDuration, 15, 120);
 				westEastDuration = KeepInBounds(westEastDuration, 15, 120);
 				timeShift = KeepInBounds(timeShift, 0, northSouthDuration + westEastDuration - 1);

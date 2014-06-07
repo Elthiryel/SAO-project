@@ -58,6 +58,7 @@
     <Compile Include="RandomStartGeneticAlgorithm.cs" />
     <Compile Include="AlgorithmUtils.cs" />
     <Compile Include="RandomStartHierarchicGeneticAlgorithm.cs" />
+    <Compile Include="RandomStartAdaptiveGeneticAlgorithm.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

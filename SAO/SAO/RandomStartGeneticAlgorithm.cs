@@ -13,14 +13,17 @@ namespace SAO
 		private ProblemInstance problemInstance;
 		private Random random;
 
-		private List<Dictionary<int, TrafficLights>> phenotypes;
+		protected int randomizationLevel;
 
-		private Dictionary<int, TrafficLights> bestConfiguration;
-		private double bestVelocity;
+		protected List<Dictionary<int, TrafficLights>> phenotypes;
+
+		protected Dictionary<int, TrafficLights> bestConfiguration;
+		protected double bestVelocity;
 
 		public RandomStartGeneticAlgorithm(ProblemInstance problemInstance, int phenotypeCount, int iterationCount, 
 		                                   int secondCount)
 		{
+			this.randomizationLevel = 10;
 			this.problemInstance = problemInstance;
 			this.phenotypeCount = phenotypeCount;
 			this.iterationCount = iterationCount;
@@ -35,7 +38,7 @@ namespace SAO
 			for (var i = 0; i < iterationCount; ++i)
 			{
 				PerformIteration();
-				Console.WriteLine("iteration " + i + ": " + bestVelocity);
+				Console.WriteLine("iteration " + i + ": " + bestVelocity + " | rL: " + randomizationLevel);
 			}
 		}
 
@@ -71,7 +74,7 @@ namespace SAO
 			PerformEvolution(simulationResult);
 		}
 
-		private void SetBest(List<double> simulationResult)
+		protected virtual void SetBest(List<double> simulationResult)
 		{
 			for (var i = 0; i < simulationResult.Count; ++i)
 			{
@@ -115,7 +118,8 @@ namespace SAO
 			var newPhenotypes = new List<Dictionary<int, TrafficLights>>(phenotypeCount);
 			for (var i = 0; i < half; ++i)
 			{
-				newPhenotypes.Add(AlgorithmUtils.Mutation(problemInstance.Crossroads, bestConfigurations[i], random));
+				newPhenotypes.Add(AlgorithmUtils.Mutation(problemInstance.Crossroads, bestConfigurations[i], 
+				                                          randomizationLevel, random));
 			}
 			for (var i = half; i < phenotypeCount; ++i)
 			{
